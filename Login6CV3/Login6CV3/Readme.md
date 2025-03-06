@@ -109,11 +109,11 @@ Si un usuario intenta acceder a `/admin/usuarios` sin el rol adecuado, será red
 
 ## Pruebas de funcionalidad
 
-![Proyecto corriendo en Docker](static/img/image2.png)
+![Proyecto corriendo en Docker](https://github.com/user-attachments/assets/dc3c41c6-71ab-49fd-84a2-d04943dec30d)
 
-![Pantalla de login](static/img/image2.png)
+![Login funcionando](https://github.com/user-attachments/assets/f9b673ec-6d06-4b4e-aad5-f25635042baf)
 
-![Conexión a base de datos](static/img/image3.png)
+![Conexión a base de datos](https://github.com/user-attachments/assets/26568ec4-2674-4236-90d0-302bba6a0ece)
 
 
 
