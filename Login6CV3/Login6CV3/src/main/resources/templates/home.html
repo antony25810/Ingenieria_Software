@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Recomendaciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1E3A8A, #1E40AF);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .welcome-message {
+            color: #D1D5DB;
+            margin-bottom: 20px;
+        }
+
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: block;
+        }
+
+        .menu-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .admin-button {
+            background-color: #EF4444;
+        }
+
+        .admin-button:hover {
+            background-color: #DC2626;
+        }
+
+        .logout {
+            display: block;
+            margin-top: 20px;
+            color: #93C5FD;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Recomendaciones</h1>
+        <p class="welcome-message" sec:authentication="name">Usuario</p>
+        
+        <div class="menu-options">
+            <a href="/libros" class="menu-button">Libros</a>
+            <a href="/peliculas" class="menu-button">Películas</a>
+            <a href="/perfil" class="menu-button">Mi Perfil</a>
+            
+            <!-- Mostrar el botón de administración solo a los usuarios con rol ADMIN -->
+            <a sec:authorize="hasRole('ROLE_ADMIN')" href="/admin/usuarios" class="menu-button admin-button">Administración de Usuarios</a>
+        </div>
+        
+        <a href="/logout" class="logout">Cerrar Sesión</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Exitoso</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(12px);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 1rem;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Registro Exitoso 🎉</h1>
+        <p>¡Te has registrado correctamente! Aquí están tus datos:</p>
+        <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Usuario</span></p>
+        <p><strong>Email:</strong> <span th:text="${usuario.email}">usuario@ejemplo.com</span></p>
+        <a href="/login" class="btn">Ir a Login</a>
+    </div>
+
+</body>
+</html>
