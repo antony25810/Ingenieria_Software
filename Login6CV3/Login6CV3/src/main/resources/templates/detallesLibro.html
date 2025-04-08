@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Libro</title>
+    <link href="../static/style.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Detalles del Libro</h1>
+    <div>
+        <h2 th:text="${detalles.title}">Título del libro</h2>
+        <p><strong>Descripción:</strong> <span th:text="${detalles.description}">Descripción no disponible</span></p>
+        <p><strong>Autores:</strong></p>
+        <ul>
+            <li th:each="author : ${detalles.authors}" th:text="${author.name}">Autor</li>
+        </ul>
+        <p><strong>Primer publicación:</strong> <span th:text="${detalles.first_publish_date}">Fecha no disponible</span></p>
+        <a href="/libros">Volver a la búsqueda</a>
+    </div>
+</body>
+</html>

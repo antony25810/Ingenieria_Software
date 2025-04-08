@@ -1,4 +1,4 @@
-package com._CV3.Login6CV3.auth.entity;
+package com._CV3.Login6CV3.auth.Entity;
 
 import jakarta.persistence.*;
 import java.util.HashSet;

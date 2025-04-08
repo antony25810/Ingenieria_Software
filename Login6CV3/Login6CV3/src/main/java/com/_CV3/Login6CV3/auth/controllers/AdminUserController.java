@@ -1,7 +1,7 @@
-package com._CV3.Login6CV3.auth.controller;
+package com._CV3.Login6CV3.auth.controllers;
 
-import com._CV3.Login6CV3.auth.entity.Rol;
-import com._CV3.Login6CV3.auth.entity.Usuario;
+import com._CV3.Login6CV3.auth.Entity.Rol;
+import com._CV3.Login6CV3.auth.Entity.Usuario;
 import com._CV3.Login6CV3.auth.repository.RolRepository;
 import com._CV3.Login6CV3.auth.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/administrador")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminUserController {
 

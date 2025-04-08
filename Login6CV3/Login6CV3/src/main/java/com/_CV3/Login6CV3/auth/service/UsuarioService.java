@@ -2,7 +2,7 @@ package com._CV3.Login6CV3.auth.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import com._CV3.Login6CV3.auth.entity.Usuario;
+import com._CV3.Login6CV3.auth.Entity.Usuario;
 import com._CV3.Login6CV3.auth.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 

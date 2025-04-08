@@ -1,6 +1,6 @@
 package com._CV3.Login6CV3.auth.controllers;
 
-import com._CV3.Login6CV3.auth.entity.Usuario;
+import com._CV3.Login6CV3.auth.Entity.Usuario;
 import com._CV3.Login6CV3.auth.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

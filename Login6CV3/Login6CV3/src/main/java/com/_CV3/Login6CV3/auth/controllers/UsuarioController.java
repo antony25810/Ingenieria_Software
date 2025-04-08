@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import com._CV3.Login6CV3.auth.entity.Usuario;
+import com._CV3.Login6CV3.auth.Entity.Usuario;
 import com._CV3.Login6CV3.auth.repository.UsuarioRepository;
 
 @Controller

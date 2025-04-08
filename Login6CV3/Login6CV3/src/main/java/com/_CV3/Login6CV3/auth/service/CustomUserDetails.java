@@ -1,6 +1,6 @@
 package com._CV3.Login6CV3.auth.service;
 
-import com._CV3.Login6CV3.auth.entity.Usuario;
+import com._CV3.Login6CV3.auth.Entity.Usuario;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
