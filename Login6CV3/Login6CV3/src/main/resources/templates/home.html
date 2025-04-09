@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Recomendaciones</title>
+    <link rel="stylesheet" href="/theme.css">
     <style>
         * {
             margin: 0;
@@ -98,6 +99,33 @@
         </div>
         
         <a href="/logout" class="logout">Cerrar Sesión</a>
+        <br>
+
+        <div>
+            <button id="theme-toggle" class="button">Activar Tema Oscuro</button>
+        </div>
     </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+    
+        // Cargar preferencia previa
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = 'Desactivar Tema Oscuro';
+        }
+    
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = 'Desactivar Tema Oscuro';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = 'Activar Tema Oscuro';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -73,7 +73,7 @@ public class AdminUserController {
                         if (emailExistente != null && !emailExistente.getId().equals(usuario.getId())) {
                             redirectAttributes.addFlashAttribute("mensaje", "El email ya está en uso por otro usuario");
                             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
-                            return "redirect:/admin/usuarios/" + usuario.getId();
+                            return "redirect:/administrador/usuarios/" + usuario.getId();
                         }
                     }
                     
@@ -92,7 +92,7 @@ public class AdminUserController {
                 if (password == null || password.trim().isEmpty()) {
                     redirectAttributes.addFlashAttribute("mensaje", "La contraseña es obligatoria para un nuevo usuario");
                     redirectAttributes.addFlashAttribute("tipoMensaje", "error");
-                    return "redirect:/admin/usuarios/nuevo";
+                    return "redirect:/administrador/usuarios/nuevo";
                 }
                 usuario.setPassword(passwordEncoder.encode(password));
             }
@@ -116,12 +116,12 @@ public class AdminUserController {
                 esNuevo ? "Usuario creado correctamente" : "Usuario actualizado correctamente");
             redirectAttributes.addFlashAttribute("tipoMensaje", "exito");
             
-            return "redirect:/admin/usuarios";
+            return "redirect:/administrador/usuarios";
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("mensaje", "Error al guardar el usuario: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
-            return "redirect:/admin/usuarios";
+            return "redirect:/administrador/usuarios";
         }
     }
 
@@ -142,6 +142,6 @@ public class AdminUserController {
             redirectAttributes.addFlashAttribute("mensaje", "Error al eliminar el usuario: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "error");
         }
-        return "redirect:/admin/usuarios";
+        return "redirect:/administrador/usuarios";
     }
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso Denegado</title>
+    <link rel="stylesheet" href="../static/theme.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -45,9 +46,32 @@
 </head>
 <body>
     <div class="container">
+        <button id="theme-toggle" class="button">Activar Tema Oscuro</button>
         <h1>Acceso Denegado</h1>
         <p>No tienes los permisos necesarios para acceder a esta página.</p>
         <a href="/home">Volver a la página principal</a>
     </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+    
+        // Cargar preferencia previa
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = 'Desactivar Tema Oscuro';
+        }
+    
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = 'Desactivar Tema Oscuro';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = 'Activar Tema Oscuro';
+            }
+        });
+    </script>
 </body>
 </html>

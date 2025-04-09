@@ -16,6 +16,11 @@ public class LoginController {
         return "home";  
     }
 
+    @GetMapping("/")
+    public String si() {
+        return "redirect:/login";  
+    }
+
     @GetMapping("/accessDenied")
     public String accessDenied() {
         return "accessDenied"; 

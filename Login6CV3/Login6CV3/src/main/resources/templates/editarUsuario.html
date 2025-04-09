@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${usuario.id == null} ? 'Nuevo Usuario' : 'Editar Usuario'">Editar Usuario</title>
-    <link rel="stylesheet" href="/css/administrador.css">
+    <link rel="stylesheet" href="/theme.css">
+    <link rel="stylesheet" href="/perfil.css"
 </head>
 <body>
     <div class="header">
         <h1>Sistema de Recomendaciones</h1>
         <p>Panel de Administración</p>
+    </div>
+
+    <div>
+        <button id="theme-toggle" class="button">Activar Tema Oscuro</button>
     </div>
     
     <div class="container">
@@ -60,5 +65,27 @@
             </div>
         </form>
     </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+    
+        // Cargar preferencia previa
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.textContent = 'Desactivar Tema Oscuro';
+        }
+    
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.textContent = 'Desactivar Tema Oscuro';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.textContent = 'Activar Tema Oscuro';
+            }
+        });
+    </script>
 </body>
 </html>
