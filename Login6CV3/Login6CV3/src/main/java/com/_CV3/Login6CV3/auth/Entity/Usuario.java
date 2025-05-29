@@ -33,6 +33,9 @@ public class Usuario {
     )
     private Set<Rol> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "usuario")
+    private Set<Busqueda> busquedas = new HashSet<>();
+
     // Getters y setters
 
     public Long getId() {

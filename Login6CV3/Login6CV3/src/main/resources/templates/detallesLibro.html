@@ -1,22 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles del Libro</title>
-    <link href="../static/style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .header {
+            background-color: #1a237e;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .book-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .book-cover {
+            flex: 0 0 300px;
+            background-color: #e0e0e0;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .book-cover img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+        .book-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        .book-title {
+            font-size: 1.8rem;
+            margin-top: 0;
+            color: #1a237e;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            color: #3f51b5;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .tag {
+            background-color: #e8eaf6;
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            color: #3949ab;
+        }
+        .navigation {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #3f51b5;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .btn-primary:hover {
+            background-color: #303f9f;
+        }
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+        .meta-info {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .debug-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+        .pre-data {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        @media (max-width: 768px) {
+            .book-cover {
+                flex: 0 0 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Detalles del Libro</h1>
-    <div>
-        <h2 th:text="${detalles.title}">Título del libro</h2>
-        <p><strong>Descripción:</strong> <span th:text="${detalles.description}">Descripción no disponible</span></p>
-        <p><strong>Autores:</strong></p>
-        <ul>
-            <li th:each="author : ${detalles.authors}" th:text="${author.name}">Autor</li>
-        </ul>
-        <p><strong>Primer publicación:</strong> <span th:text="${detalles.first_publish_date}">Fecha no disponible</span></p>
-        <a href="/libros">Volver a la búsqueda</a>
+    <div class="header">
+        <h1>Detalles del Libro</h1>
+    </div>
+    <div class="container">
+        <div class="book-details">
+            <!-- Portada del libro -->
+            <div class="book-cover">
+                <img src="/images/placeholder-book.png" alt="Portada no disponible">
+            </div>
+            
+            <!-- Información del libro -->
+            <div class="book-info">
+               <!-- Título -->
+                <h1 class="book-title" th:text="${detalles.title != null ? detalles.title : 'Título no disponible'}">Título del Libro</h1>
+
+                <!-- Año de publicación -->
+                <p>
+                    <strong>Fecha de publicación:</strong>
+                    <span th:text="${detalles.first_publish_year != null ? detalles.first_publish_year : 'No disponible'}">Fecha</span>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Navegación -->
+        <div class="navigation">
+            <a href="/libros" class="btn btn-secondary">Volver a la búsqueda</a>
+            <a href="/libros/recomendaciones" class="btn btn-primary">Ver mis recomendaciones</a>
+        </div>
+        
+        <!-- Sección de depuración -->
+        <div class="debug-section">
+            <h3>Datos completos para depuración</h3>
+            <div class="pre-data" th:text="${detalles}">Datos del libro</div>
+        </div>
     </div>
 </body>
 </html>

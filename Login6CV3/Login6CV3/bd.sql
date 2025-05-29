@@ -30,6 +30,15 @@ CREATE TABLE usuario_roles (
     FOREIGN KEY (rol_id) REFERENCES roles(id)
 );
 
+-- Crear tabla de historial de búsquedas
+CREATE TABLE busquedas (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    termino VARCHAR(255) NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    usuario_id BIGINT,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
 -- Insertar roles en la tabla roles
 INSERT INTO roles (nombre) VALUES ('ROLE_ADMIN'), ('ROLE_USER');
 

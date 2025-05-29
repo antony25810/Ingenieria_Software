@@ -17,6 +17,11 @@ public class CustomUserDetails implements UserDetails {
         this.usuario = usuario;
     }
 
+    public Usuario getUsuario() {
+        return this.usuario;
+    }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Convertir los roles del usuario a GrantedAuthority

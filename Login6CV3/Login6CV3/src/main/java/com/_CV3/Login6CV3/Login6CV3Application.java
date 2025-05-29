@@ -17,7 +17,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
     "com._CV3.Login6CV3.auth.SistemaAutenticacion"
 })
 @EnableJpaRepositories(basePackages = "com._CV3.Login6CV3.auth.repository")
-@EntityScan(basePackages = "com._CV3.Login6CV3.auth.entity")
+@EntityScan(basePackages = "com._CV3.Login6CV3.auth.Entity")
 public class Login6CV3Application {
     
 	public static void main(String[] args) {

@@ -177,6 +177,7 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: background-color 0.3s;
+            text-decoration: none;
         }
         
         .details-button {
@@ -237,7 +238,7 @@
             margin-top: 20px;
         }
         
-        .back-button {
+        .back-button, .recommendations-button {
             background-color: #f5f5f5;
             color: #333;
             border: none;
@@ -250,8 +251,17 @@
             display: inline-block;
         }
         
-        .back-button:hover {
+        .back-button:hover, .recommendations-button:hover {
             background-color: #e0e0e0;
+        }
+        
+        .recommendations-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .recommendations-button:hover {
+            background-color: #45a049;
         }
         
         .loading {
@@ -273,14 +283,70 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        /* Mensaje de notificación para registro de búsqueda */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        .notification.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .notification.error {
+            background-color: #f44336;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>Búsqueda de Libros</h1>
     </div>
-    
     <div class="container">
+        
+        <!-- SECCIÓN DE RECOMENDACIONES PERSONALIZADAS -->
+        <div th:if="${recomendaciones != null and !#lists.isEmpty(recomendaciones)}" class="results-section" style="margin-bottom:30px;">
+            <h2 class="results-title">Recomendados para ti</h2>
+            <div class="book-grid">
+                <div th:each="libro : ${recomendaciones}" class="book-card">
+                    <div class="book-cover">
+                        <img th:src="${libro.cover_i != null} ? 'https://covers.openlibrary.org/b/id/' + ${libro.cover_i} + '-M.jpg' : '/api/placeholder/250/300'"
+                             th:alt="'Portada de ' + ${libro.title}" 
+                             onerror="this.src='/api/placeholder/250/300'">
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title" th:text="${libro.title}">Título</h3>
+                        <p class="book-author" th:text="${libro.author_name != null ? #strings.arrayJoin(libro.author_name, ', ') : 'Autor desconocido'}"></p>
+                        <p class="book-year" th:text="${libro.first_publish_year != null ? libro.first_publish_year : (libro.publish_year != null ? libro.publish_year[0] : 'Desconocido')}"></p>
+                        <p class="book-description">No hay descripción disponible para este libro.</p>
+                        <div class="book-actions">
+                            <a class="book-button details-button"
+                               th:href="@{'/libros/detalles'(olid=${#strings.substring(libro.key, libro.key.lastIndexOf('/') + 1)})}"
+                               >Ver detalles</a>
+                            <button class="book-button recommend-button" 
+                                    th:attr="data-key=${libro.key}" 
+                                    th:onclick="'alert(\'Libro recomendado: ' + ${libro.title} + '\')'">Recomendar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SECCIÓN DE BÚSQUEDA -->
         <div class="search-section">
             <h2 class="search-title">Buscar Libros</h2>
             <div class="search-form">
@@ -322,7 +388,6 @@
             <div id="bookGrid" class="book-grid">
                 <!-- Los resultados de búsqueda se mostrarán aquí -->
             </div>
-            
             <div id="pagination" class="pagination">
                 <!-- La paginación se generará dinámicamente -->
             </div>
@@ -335,7 +400,13 @@
         
         <div class="navigation-buttons">
             <a href="/home" class="back-button">Volver al inicio</a>
+            <a href="/libros/recomendaciones" class="recommendations-button">Ver mis recomendaciones</a>
         </div>
+    </div>
+    
+    <!-- Notificación para registro de búsqueda -->
+    <div id="notification" class="notification">
+        Búsqueda registrada para tus recomendaciones
     </div>
     
     <script>
@@ -349,6 +420,7 @@
             const noResults = document.getElementById('noResults');
             const loading = document.getElementById('loading');
             const pagination = document.getElementById('pagination');
+            const notification = document.getElementById('notification');
             
             let currentPage = 1;
             const itemsPerPage = 10;
@@ -368,6 +440,45 @@
                 });
             });
             
+            // Función para mostrar notificaciones
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.classList.toggle('error', isError);
+                notification.classList.add('show');
+                
+                // Ocultar la notificación después de 3 segundos
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Función para registrar la búsqueda en el servidor
+            function registrarBusqueda(query) {
+                fetch('/api/registrar-busqueda', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query: query }),
+                    credentials: 'same-origin' // Para incluir cookies de sesión
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showNotification(data.message);
+                    } else {
+                        console.warn('No se pudo registrar la búsqueda:', data.message);
+                        // No mostrar error al usuario si no está logueado
+                        if (data.message !== "Usuario no autenticado") {
+                            showNotification(data.message, true);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al registrar búsqueda:', error);
+                });
+            }
+            
             function performSearch(page) {
                 const title = titleInput.value.trim();
                 const author = authorInput.value.trim();
@@ -378,31 +489,42 @@
                     return;
                 }
                 
+                // Construir la consulta para registro
+                let searchTerms = [];
+                if (title) searchTerms.push(`title:${title}`);
+                if (author) searchTerms.push(`author:${author}`);
+                if (subject) searchTerms.push(`subject:${subject}`);
+                
+                const searchQuery = searchTerms.join(' ');
+                
+                // Registrar la búsqueda en el servidor
+                registrarBusqueda(searchQuery);
+                
                 // Mostrar loader
                 loading.style.display = 'block';
                 resultsSection.style.display = 'none';
                 noResults.style.display = 'none';
                 
                 // Construir la URL de búsqueda
-                let searchQuery = [];
+                let apiParams = [];
                 
                 if (title) {
-                    searchQuery.push(`title=${encodeURIComponent(title)}`);
+                    apiParams.push(`title=${encodeURIComponent(title)}`);
                 }
                 
                 if (author) {
-                    searchQuery.push(`author=${encodeURIComponent(author)}`);
+                    apiParams.push(`author=${encodeURIComponent(author)}`);
                 }
                 
                 if (subject) {
-                    searchQuery.push(`subject=${encodeURIComponent(subject)}`);
+                    apiParams.push(`subject=${encodeURIComponent(subject)}`);
                 }
                 
                 // Si hay título, autor o categoría específicos, usamos los parámetros correspondientes
                 // Si no, usamos un término de búsqueda general
                 let apiUrl;
-                if (searchQuery.length > 0) {
-                    apiUrl = `https://openlibrary.org/search.json?${searchQuery.join('&')}&page=${page}`;
+                if (apiParams.length > 0) {
+                    apiUrl = `https://openlibrary.org/search.json?${apiParams.join('&')}&page=${page}`;
                 } else {
                     // Búsqueda general si no hay criterios específicos
                     apiUrl = `https://openlibrary.org/search.json?q=${encodeURIComponent(title || author || '')}`;
@@ -480,23 +602,16 @@
                             <p class="book-year">${publishYear}</p>
                             <p class="book-description">${description}</p>
                             <div class="book-actions">
-                                <button class="book-button details-button" data-key="${book.key}">Ver detalles</button>
+                                <a class="book-button details-button" href="/libros/detalles?olid=${book.key.split('/').pop()}">Ver detalles</a>
                                 <button class="book-button recommend-button" data-key="${book.key}">Recomendar</button>
                             </div>
                         </div>
                     `;
                     
-                    // Agregar evento para el botón de detalles
-                    bookCard.querySelector('.details-button').addEventListener('click', function() {
-                        const key = this.getAttribute('data-key');
-                        window.open(`https://openlibrary.org${key}`, '_blank');
-                    });
-                    
                     // Agregar evento para el botón de recomendar (aquí puedes implementar tu propia lógica)
                     bookCard.querySelector('.recommend-button').addEventListener('click', function() {
                         const key = this.getAttribute('data-key');
                         alert(`Libro recomendado: ${book.title}`);
-                        // Aquí podrías implementar la lógica para guardar la recomendación en tu backend
                     });
                     
                     // Agregar la tarjeta al grid

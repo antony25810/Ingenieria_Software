@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:14
+    container_name: camionetas-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: camionetas_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: camionetas-api
+    command: >
+      bash -c "
+        echo 'Iniciando contendor en modo depuración...' &&
+        sleep 5 && 
+        echo 'Conectando a base de datos...' &&
+        sleep 2 &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/camionetas_db
+      - ENVIRONMENT=development
+      - PYTHONPATH=/app
+      - MAX_WORKERS=1
+      - LOG_LEVEL=info
+    restart: on-failure:5
+
+  frontend:
+    build: ./frontend
+    container_name: camionetas-ui
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api/v1
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
